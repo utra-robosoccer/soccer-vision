@@ -8,7 +8,7 @@ classdef Line2f < handle
     end
     
     methods
-        function obj = line(rho,theta)
+        function obj = Line2f(rho,theta)
             %LINE Construct an instance of this class
             %   Detailed explanation goes here
             obj.rho = rho;
@@ -22,10 +22,13 @@ classdef Line2f < handle
               obj.theta = obj.theta + pi;
            end
         end
+        function valid = isValid(obj)
+            valid = ~(obj.rho == 0 && obj.theta == 0);
+        end
     end
     
     methods(Static)
-        function intersect = intersection(obj1, obj2)
+        function intersect = screenIntersection(obj1, obj2)
             %METHOD1 Finds the screen intersection between 2 points
             rho1 = obj1.rho;
             theta1 = obj1.theta;
