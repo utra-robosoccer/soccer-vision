@@ -3,7 +3,11 @@ function lines3D = lines2Dto3D(lines, img, robotHeight, d, robotAngle, cameraAng
     
     lines3D = zeros(r,6);
     
-    for i = 1:length(r)
+    for i = 1:r
+        if(lines(i,1) == 1 && lines(i,2) == 1 && lines(i,3) == 1 && lines(i,4) == 2)
+            continue
+        end
+        
         p1 = Point2f(lines(i,1), lines(i,2));
         p2 = Point2f(lines(i,3), lines(i,4));
         

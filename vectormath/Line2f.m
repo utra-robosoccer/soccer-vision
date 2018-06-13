@@ -35,11 +35,15 @@ classdef Line2f < handle
             rho2 = obj2.rho;
             theta2 = obj2.theta;
             
-            x = (rho1 / cos(pi/2 - theta1) - rho2 / cos(pi/2 - theta2)) / (tan(theta2 - pi/2) - tan(theta2 - pi/2));
-            y = rho1 / cos(pi/2 - theta1) + tan(theta1 - PI / 2) * x;
+            A = [cos(theta1), sin(theta1);
+                cos(theta2), sin(theta2)];
+            
+            b = [rho1; rho2];
+            
+            r = A \ b;
             
             % Create the intersection
-            intersect = Point2f(x, y);
+            intersect = Point2f(r(1), r(2));
         end
     end
 end

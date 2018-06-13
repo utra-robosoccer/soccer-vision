@@ -38,15 +38,15 @@ classdef findFieldAndPostIntersections < matlab.System
     methods(Access = protected)
         function setupImpl(obj)
             % Perform one-time calculations, such as computing constants
-            obj.lines{1} = Segment2f(Point2f(0, 0), Point2f(0, 0));
-            obj.lines{2} = Segment2f(Point2f(0, 0), Point2f(0, 0));
-            obj.lines{3} = Segment2f(Point2f(0, 0), Point2f(0, 0));
-            obj.lines{4} = Segment2f(Point2f(0, 0), Point2f(0, 0));
-            obj.lines{5} = Segment2f(Point2f(0, 0), Point2f(0, 0));
-            obj.lines{6} = Segment2f(Point2f(0, 0), Point2f(0, 0));
-            obj.lines{7} = Segment2f(Point2f(0, 0), Point2f(0, 0));
-            obj.lines{8} = Segment2f(Point2f(0, 0), Point2f(0, 0));
-            obj.lines{9} = Segment2f(Point2f(0, 0), Point2f(0, 0));
+            obj.lines{1} = Line2f(0,0);
+            obj.lines{2} = Line2f(0,0);
+            obj.lines{3} = Line2f(0,0);
+            obj.lines{4} = Line2f(0,0);
+            obj.lines{5} = Line2f(0,0);
+            obj.lines{6} = Line2f(0,0);
+            obj.lines{7} = Line2f(0,0);
+            obj.lines{8} = Line2f(0,0);
+            obj.lines{9} = Line2f(0,0);
             obj.intersect{1} = Point2f(0,0);
             obj.intersect{2} = Point2f(0,0);
             obj.intersect{3} = Point2f(0,0);
@@ -61,67 +61,51 @@ classdef findFieldAndPostIntersections < matlab.System
 
         function pointArray = stepImpl(obj,lineArray)
             
+            pointArray = zeros(10, 2);
             if nargin ~= 2
                return; 
             end
             
             [l, w] = size(lineArray);
-            if l ~= 9 || w ~= 6
+            if l ~= 9 || w ~= 2
                 return;
             end
             
             for i = 1:9
-                obj.lines{i}.p1.x = lineArray(i,1);
-                obj.lines{i}.p1.y = lineArray(i,2);
-                obj.lines{i}.p2.x = lineArray(i,3);
-                obj.lines{i}.p2.y = lineArray(i,4);
+                obj.lines{i}.rho = double(lineArray(i,2));
+                obj.lines{i}.theta = double(lineArray(i,1));
+            end
+            
+            for i = 1:10
+                obj.intersect{i}.x = 0;
+                obj.intersect{i}.y = 0;
+            end
+            
+            z = 1;
+            % Field and Line intersection
+            for i = 1:4
+                for j = 5:9
+                    if (obj.lines{i}.isValid && obj.lines{j}.isValid && z <= 10)
+                        obj.intersect{z} = Line2f.screenIntersection(obj.lines{i}, obj.lines{j});
+                        z = z + 1;
+                    end
+                end
+            end
+            
+            % Field and Field intersection
+            for i = 5:9
+                for j = 5:9
+                    if (i <= j)
+                        continue
+                    end
+                    if (obj.lines{i}.isValid && obj.lines{j}.isValid && z <= 10)
+                        obj.intersect{z} = Line2f.screenIntersection(obj.lines{i}, obj.lines{j});
+                        z = z + 1;
+                    end
+                end
             end
             
             
-            % Field lines
-            enemyLeftPost = obj.lines{1};
-            enemyRightPost = obj.lines{2};
-            friendlyLeftPost = obj.lines{3};
-            friendlyRightPost = obj.lines{4};
-            enemyBackLine = obj.lines{5};
-            leftFieldLine = obj.lines{6};
-            rightFieldLine = obj.lines{7};
-            friendlyBackLine = obj.lines{8};
-            centerLine = obj.lines{9};
-            
-            % Find the intersection
-            if leftFieldLine.isValid && enemyBackLine.isValid
-                obj.intersect{1} = Segment2f.intersection(leftFieldLine, enemyBackLine);
-            end
-            if enemyLeftPost.isValid && enemyBackLine.isValid
-                obj.intersect{2} = Segment2f.intersection(enemyLeftPost, enemyBackLine);
-            end
-            if enemyRightPost.isValid && enemyBackLine.isValid
-                obj.intersect{3} = Segment2f.intersection(enemyRightPost, enemyBackLine);
-            end
-            if rightFieldLine.isValid && enemyBackLine.isValid
-                obj.intersect{4} = Segment2f.intersection(rightFieldLine, enemyBackLine);
-            end
-            if leftFieldLine.isValid && centerLine.isValid
-                obj.intersect{5} = Segment2f.intersection(leftFieldLine, centerLine);
-            end
-            if rightFieldLine.isValid && centerLine.isValid
-                obj.intersect{6} = Segment2f.intersection(rightFieldLine, centerLine);
-            end
-            if leftFieldLine.isValid && friendlyBackLine.isValid
-                obj.intersect{7} = Segment2f.intersection(leftFieldLine, friendlyBackLine);
-            end
-            if friendlyLeftPost.isValid && friendlyBackLine.isValid
-                obj.intersect{8} = Segment2f.intersection(friendlyLeftPost, friendlyBackLine);
-            end
-            if friendlyRightPost.isValid && friendlyBackLine.isValid
-                obj.intersect{9} = Segment2f.intersection(friendlyRightPost, friendlyBackLine);
-            end
-            if rightFieldLine.isValid && friendlyBackLine.isValid
-                obj.intersect{10} = Segment2f.intersection(rightFieldLine, friendlyBackLine);
-            end
-            
-            pointArray = zeros(10, 2);
             for i = 1:10
                pointArray(i,1) = obj.intersect{i}.x;
                pointArray(i,2) = obj.intersect{i}.y;
