@@ -5,7 +5,7 @@ cx = 960 / 2;
 cy = 540 / 2;
 width = 100;
 lines = [
-    cx + 480, cy + 270, cx + 480, cy - 270;
+    cx + 480, cy - 270, cx + 480, cy + 270;
     cx + 480, cy - 270, cx - 480, cy - 270;
     cx - 480, cy - 270, cx - 480, cy + 270;
     cx - 480, cy + 270, cx + 480, cy + 270;
@@ -26,11 +26,11 @@ lines = [
 % drawfield(lines)
 
 img = zeros(540, 960);
-robotHeight = 500;
+robotHeight = 500; % Half a meter tall
 d = 0;
 robotAngle = 0;
-cameraAngle = pi/6; % Looking 30 degrees down
-focalLength = 200; % Needs to be calibrated
+cameraAngle = pi/18; % Looking 10 degrees down
+focalLength = 2000; % Needs to be calibrated
 
 lines3D = lines2Dto3D(lines, img, robotHeight, d, robotAngle, cameraAngle, focalLength);
 

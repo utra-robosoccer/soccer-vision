@@ -10,6 +10,23 @@ function lines3D = lines2Dto3D(lines, img, robotHeight, d, robotAngle, cameraAng
         
         p1 = Point2f(lines(i,1), lines(i,2));
         p2 = Point2f(lines(i,3), lines(i,4));
+        line = Line2f(lines(i,1), lines(i,2), lines(i,3), lines(i,4));
+        
+        % Check if the line has crossed the horizon, clip it at the horizon
+        horizonY = tan(cameraAngle) * focalLength - 10;
+        [w, ~] = size(img);
+        horizonLine = Line2f(w/2 - horizonY, pi/2);
+        
+        if(p1.y < w/2 - horizonY && p2.y < w/2 - horizonY)
+            continue;
+        end
+        if(p1.y < w/2 - horizonY)
+            p1.y = Line2f.screenIntersection(horizonLine, line).y;
+        end
+        if(p2.y < w/2 - horizonY)
+            p2.y = Line2f.screenIntersection(horizonLine, line).y;
+        end
+
         
         p1_3d = point2Dto3D(p1, img, robotHeight, d, robotAngle, cameraAngle, focalLength); 
         p2_3d = point2Dto3D(p2, img, robotHeight, d, robotAngle, cameraAngle, focalLength);

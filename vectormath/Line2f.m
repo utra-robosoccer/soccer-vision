@@ -8,13 +8,20 @@ classdef Line2f < handle
     end
     
     methods
-        function obj = Line2f(rho,theta)
+        function obj = Line2f(rho, theta, x2, y2)
             %LINE Construct an instance of this class
             %   Detailed explanation goes here
-            obj.rho = rho;
-            obj.theta = theta;
+            if(nargin == 4)
+                obj = Line2f.FourPointsToLine(rho, theta, x2, y2);
+                return;
+            end
             
-            normalize(obj);
+            if(nargin == 2)
+                obj.rho = rho;
+                obj.theta = theta;
+                normalize(obj);
+                return;
+            end
         end
         function normalize(obj)
            if(obj.rho < 0)
@@ -44,6 +51,21 @@ classdef Line2f < handle
             
             % Create the intersection
             intersect = Point2f(r(1), r(2));
+        end
+        function line = FourPointsToLine(x1, y1, x2, y2)
+            %LINE Construct an instance of this class
+            %   Detailed explanation goes here            
+            m = (y2 - y1) / (x2 - x1);
+            theta = atan2(y2 - y1, x2 - x1) - pi/2;
+            if (m == -Inf) % Kinda sketchy
+               m = -1000000000; 
+            end
+            if (m == Inf)
+               m = 1000000000; 
+            end
+            rho = abs(y1 + m * x1)/sqrt(m^2 + 1);
+            
+            line = Line2f(rho, theta);
         end
     end
 end

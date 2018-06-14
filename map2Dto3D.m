@@ -1,17 +1,6 @@
-classdef map2Dto3D < matlab.System
+classdef map2Dto3D < matlab.System & matlab.system.mixin.SampleTime
     % Converts a 2d to 3d point on the field
     %
-    % This template includes the minimum set of functions required
-    % to define a System object with discrete state.
-
-    % Public, tunable properties
-    properties
-        
-    end
-
-    properties(DiscreteState)
-
-    end
 
     % Pre-computed constants
     properties(Access = private)
@@ -35,7 +24,7 @@ classdef map2Dto3D < matlab.System
                 points3D(i, 2) = p3d.y;
                 points3D(i, 3) = p3d.z;
             end
-            lines3D = lines2Dto3D(double(lines), img, robotHeight, d, robotAngle, cameraAngle, focalLength);
+            lines3D = lines2Dto3D(double(lines(5:9,:)), img, robotHeight, d, robotAngle, cameraAngle, focalLength);
         end
 
         function resetImpl(~)
