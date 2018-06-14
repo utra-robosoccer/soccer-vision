@@ -4,7 +4,7 @@ close all;
 cx = 960 / 2;
 cy = 540 / 2;
 width = 100;
-lines = [
+lines1 = [
     cx + 480, cy - 270, cx + 480, cy + 270;
     cx + 480, cy - 270, cx - 480, cy - 270;
     cx - 480, cy - 270, cx - 480, cy + 270;
@@ -22,15 +22,19 @@ lines = [
     cx - width, cy + width/2, cx + width, cy + width/2;
     ];
 
-% lines = [675,1,675,540;176,1,199,540;1,1,1,2;1,1,1,2;1,1,1,2;1,1,1,2;1,1,1,2;1,1,1,2;1,331,960,320]
+lines2 = [681,1,691,540;189,1,218,540;1,1,1,2;1,1,1,2;259,1,960,492;1,1,1,2;612,1,1,478;1,329,960,312;0,0,0,0];
+lines = [lines2];
 % drawfield(lines)
+
+
+[l, w] = size(lines);
 
 img = zeros(540, 960);
 robotHeight = 500; % Half a meter tall
-d = 0;
+d = -5;
 robotAngle = 0;
-cameraAngle = pi/18; % Looking 10 degrees down
-focalLength = 2000; % Needs to be calibrated
+cameraAngle = pi/16; % Looking 10 degrees down
+focalLength = 630; % Needs to be calibrated
 
 lines3D = lines2Dto3D(lines, img, robotHeight, d, robotAngle, cameraAngle, focalLength);
 

@@ -31,22 +31,13 @@ classdef findFieldAndPostIntersections < matlab.System
 
     % Pre-computed constants
     properties(Access = private)
-        lines = cell(9,1);
         intersect = cell(10,1);
+        lines = cell(9,1);
     end
 
     methods(Access = protected)
         function setupImpl(obj)
             % Perform one-time calculations, such as computing constants
-            obj.lines{1} = Line2f(0,0);
-            obj.lines{2} = Line2f(0,0);
-            obj.lines{3} = Line2f(0,0);
-            obj.lines{4} = Line2f(0,0);
-            obj.lines{5} = Line2f(0,0);
-            obj.lines{6} = Line2f(0,0);
-            obj.lines{7} = Line2f(0,0);
-            obj.lines{8} = Line2f(0,0);
-            obj.lines{9} = Line2f(0,0);
             obj.intersect{1} = Point2f(0,0);
             obj.intersect{2} = Point2f(0,0);
             obj.intersect{3} = Point2f(0,0);
@@ -57,23 +48,30 @@ classdef findFieldAndPostIntersections < matlab.System
             obj.intersect{8} = Point2f(0,0);
             obj.intersect{9} = Point2f(0,0);
             obj.intersect{10} = Point2f(0,0);
+            obj.lines{1} = Segment2f(Point2f(0,0), Point2f(0,0));
+            obj.lines{2} = Segment2f(Point2f(0,0), Point2f(0,0));
+            obj.lines{3} = Segment2f(Point2f(0,0), Point2f(0,0));
+            obj.lines{4} = Segment2f(Point2f(0,0), Point2f(0,0));
+            obj.lines{5} = Segment2f(Point2f(0,0), Point2f(0,0));
+            obj.lines{6} = Segment2f(Point2f(0,0), Point2f(0,0));
+            obj.lines{7} = Segment2f(Point2f(0,0), Point2f(0,0));
+            obj.lines{8} = Segment2f(Point2f(0,0), Point2f(0,0));
+            obj.lines{9} = Segment2f(Point2f(0,0), Point2f(0,0));
         end
 
         function pointArray = stepImpl(obj,lineArray)
             
             pointArray = zeros(10, 2);
-            if nargin ~= 2
-               return; 
-            end
             
             [l, w] = size(lineArray);
-            if l ~= 9 || w ~= 2
+            if l ~= 9 || w ~= 6
                 return;
             end
             
             for i = 1:9
-                obj.lines{i}.rho = double(lineArray(i,2));
-                obj.lines{i}.theta = double(lineArray(i,1));
+                p1 = Point2f(lineArray(i,1), lineArray(i,2));
+                p2 = Point2f(lineArray(i,4), lineArray(i,5));
+                obj.lines{i} = Segment2f(p1, p2);
             end
             
             for i = 1:10
@@ -86,7 +84,7 @@ classdef findFieldAndPostIntersections < matlab.System
             for i = 1:4
                 for j = 5:9
                     if (obj.lines{i}.isValid && obj.lines{j}.isValid && z <= 10)
-                        obj.intersect{z} = Line2f.screenIntersection(obj.lines{i}, obj.lines{j});
+                        obj.intersect{z} = Segment2f.intersection(obj.lines{i}, obj.lines{j});
                         z = z + 1;
                     end
                 end
@@ -99,7 +97,7 @@ classdef findFieldAndPostIntersections < matlab.System
                         continue
                     end
                     if (obj.lines{i}.isValid && obj.lines{j}.isValid && z <= 10)
-                        obj.intersect{z} = Line2f.screenIntersection(obj.lines{i}, obj.lines{j});
+                        obj.intersect{z} = Segment2f.intersection(obj.lines{i}, obj.lines{j});
                         z = z + 1;
                     end
                 end

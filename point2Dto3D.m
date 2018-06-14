@@ -2,7 +2,7 @@ function point3f = point2Dto3D(point2f, img, robotHeight, d, robotAngle, cameraA
     [h, w] = size(img);
     
     % Need to cut off the screen based on the angle chosen
-    x = double(point2f.x - w / 2);
+    x = double(w / 2 - point2f.x);
     y = double(h / 2 - point2f.y);
     
     angle1 = atan2(y, focalLength);
