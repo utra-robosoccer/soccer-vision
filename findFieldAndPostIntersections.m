@@ -81,14 +81,14 @@ classdef findFieldAndPostIntersections < matlab.System
             
             z = 1;
             % Field and Line intersection
-            for i = 1:4
-                for j = 5:9
-                    if (obj.lines{i}.isValid && obj.lines{j}.isValid && z <= 10)
-                        obj.intersect{z} = Segment2f.intersection(obj.lines{i}, obj.lines{j});
-                        z = z + 1;
-                    end
-                end
-            end
+%             for i = 1:4
+%                 for j = 5:9
+%                     if (obj.lines{i}.isValid && obj.lines{j}.isValid && z <= 10)
+%                         obj.intersect{z} = Segment2f.intersection(obj.lines{i}, obj.lines{j});
+%                         z = z + 1;
+%                     end
+%                 end
+%             end
             
             % Field and Field intersection
             for i = 5:9
@@ -102,7 +102,6 @@ classdef findFieldAndPostIntersections < matlab.System
                     end
                 end
             end
-            
             
             for i = 1:10
                pointArray(i,1) = obj.intersect{i}.x;

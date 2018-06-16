@@ -20,8 +20,8 @@ classdef Segment2f < handle
         function s = slope(obj)
             s = (obj.p2.y - obj.p1.y) / (obj.p2.x - obj.p1.x);
         end
-        function i = intersecty(obj)
-            i = obj.p1.y - obj.slope * obj.p1.x;
+        function b = intersecty(obj)
+            b = obj.p1.y - obj.slope * obj.p1.x;
         end
     end
     
@@ -38,6 +38,24 @@ classdef Segment2f < handle
             y = slope1 * x + intersecty1;
             
             intersect = Point2f(x, y);
+        end
+        function intersect = intersection2(obj1, obj2)
+            %METHOD1 Finds the screen intersection between 2 points
+            
+            x1 = obj1.p1.x;
+            x2 = obj1.p2.x;
+            x3 = obj2.p1.x;
+            x4 = obj2.p2.x;
+            
+            y1 = obj1.p1.y;
+            y2 = obj1.p2.y;
+            y3 = obj2.p1.y;
+            y4 = obj2.p2.y;
+            
+            ta = ((y3 - y4) * (x1 - x3) + (x4 - x3) * (y1 - y3)) / ((x4 - x3) * (y1 - y2) - (x1 - x2) * (y4 - y3));
+            tb = ((y1 - y2) * (x1 - x3) + (x2 - x1) * (y1 - y3)) / ((x4 - x3) * (y1 - y2) - (x1 - x2) * (y4 - y3));
+
+            intersect = Point2f(ta, tb);
         end
     end
 end
