@@ -31,13 +31,14 @@ classdef findFieldAndPostIntersections < matlab.System
 
     % Pre-computed constants
     properties(Access = private)
-        intersect = cell(10,1);
-        lines = cell(9,1);
+        intersect
+        lines
     end
 
     methods(Access = protected)
         function setupImpl(obj)
             % Perform one-time calculations, such as computing constants
+            obj.intersect = cell(10,1);
             obj.intersect{1} = Point2f(0,0);
             obj.intersect{2} = Point2f(0,0);
             obj.intersect{3} = Point2f(0,0);
@@ -48,6 +49,8 @@ classdef findFieldAndPostIntersections < matlab.System
             obj.intersect{8} = Point2f(0,0);
             obj.intersect{9} = Point2f(0,0);
             obj.intersect{10} = Point2f(0,0);
+            
+            obj.lines = cell(9,1);
             obj.lines{1} = Segment2f(Point2f(0,0), Point2f(0,0));
             obj.lines{2} = Segment2f(Point2f(0,0), Point2f(0,0));
             obj.lines{3} = Segment2f(Point2f(0,0), Point2f(0,0));
