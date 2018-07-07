@@ -52,10 +52,19 @@ classdef Segment2f < handle
             y3 = obj2.p1.y;
             y4 = obj2.p2.y;
             
-            ta = ((y3 - y4) * (x1 - x3) + (x4 - x3) * (y1 - y3)) / ((x4 - x3) * (y1 - y2) - (x1 - x2) * (y4 - y3));
-            tb = ((y1 - y2) * (x1 - x3) + (x2 - x1) * (y1 - y3)) / ((x4 - x3) * (y1 - y2) - (x1 - x2) * (y4 - y3));
+            line1 = [x1, y1; x2, y2];
+            line2 = [x3, y3; x4, y4];
+            
+            m1 = (line1(2,2) - line1(1,2))/(line1(2,1) - line1(1,1));
+            m2 = (line2(2,2) - line2(1,2))/(line2(2,1) - line2(1,1));
 
-            intersect = Point2f(ta, tb);
+            b1 = line1(1,2) - m1*line1(1,1);
+            b2 = line2(1,2) - m2*line2(1,1);
+
+            xintersect = (b2-b1)/(m1-m2);
+            yintersect = m1*xintersect + b1;
+            
+            intersect = Point2f(xintersect,yintersect);
         end
     end
 end

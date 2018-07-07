@@ -59,7 +59,7 @@ classdef findFieldAndPostIntersections < matlab.System
             obj.lines{9} = Segment2f(Point2f(0,0), Point2f(0,0));
         end
 
-        function pointArray = stepImpl(obj,lineArray)
+        function [lineArray, pointArray] = stepImpl(obj,lineArray)
             
             pointArray = zeros(10, 2);
             
@@ -80,7 +80,7 @@ classdef findFieldAndPostIntersections < matlab.System
             end
             
             z = 1;
-            % Field and Line intersection
+            % Field and Net intersection
 %             for i = 1:4
 %                 for j = 5:9
 %                     if (obj.lines{i}.isValid && obj.lines{j}.isValid && z <= 10)
@@ -97,8 +97,11 @@ classdef findFieldAndPostIntersections < matlab.System
                         continue
                     end
                     if (obj.lines{i}.isValid && obj.lines{j}.isValid && z <= 10)
-                        obj.intersect{z} = Segment2f.intersection(obj.lines{i}, obj.lines{j});
-                        z = z + 1;
+                        inter = Segment2f.intersection2(obj.lines{i}, obj.lines{j});
+                        if inter.y > 0 && inter.y < 9000 && inter.x < 6000 && inter.x > -6000
+                            obj.intersect{z} = inter;
+                            z = z + 1;
+                        end
                     end
                 end
             end
