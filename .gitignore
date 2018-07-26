@@ -35,3 +35,6 @@ Icon?
 soccer_msgs/matlab_gen
 *.r2017b
 *.r2017b
+*.slxc
+*.sh
+*.tgz
