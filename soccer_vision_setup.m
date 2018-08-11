@@ -1,9 +1,6 @@
 % Load Paths
-addpath('../soccer-control')
-addpath('../soccer-vision')
-addpath('../soccer-utility')
-addpath('media')
-addpath('vectormath')
+addpath('soccer-vision/media')
+addpath('soccer-vision/vectormath')
 
 % VSS_MODE = 2 for Video file, 1 for Gazebo
 VSS_MODE = 1;
@@ -14,7 +11,7 @@ if VSS_MODE == 1
 end
 
 % Camera Parameters
-focalLength = 700; % Ratio for focal length vs pixel
+focalLength = 500; % Ratio for focal length vs pixel
 
 % Line detection parameters
 clusterProximityThreshold = 0.05;
